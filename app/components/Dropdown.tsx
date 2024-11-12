@@ -17,7 +17,7 @@ const Dropdown: React.FC<DropdownProps> = ({ title, children }) => {
     <div className="relative w-fit  ">
       <button
         onClick={toggleDropdown}
-        className="flex items-center justify-between w-full px-4 bg-white  focus:outline-none"
+        className="flex items-center justify-between w-full px-4 bg-white   focus:outline-none"
       >
         <span className="">{title}</span>
         <Icon
