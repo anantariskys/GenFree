@@ -7,9 +7,10 @@ interface InputProps {
   type?: string;
   id: string;
   icon: string;
+  name?: string;
 }
 
-const Input: React.FC<InputProps> = ({ label, placeholder, type = "text", id, icon }) => {
+const Input: React.FC<InputProps> = ({ label, placeholder, type = "text", id, icon,name }) => {
   return (
     <div className="flex flex-col ">
       <label htmlFor={id} className="md:text-xl text-base">
@@ -27,6 +28,7 @@ const Input: React.FC<InputProps> = ({ label, placeholder, type = "text", id, ic
           id={id}
           placeholder={placeholder}
           className="border-2 rounded-xl pl-10 pr-4 p-2 outline-none w-full"
+          name={name}
         />
       </div>
     </div>
