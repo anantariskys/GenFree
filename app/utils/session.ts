@@ -6,8 +6,8 @@ export const sessionStorage = createCookieSessionStorage({
       secure: true,
       httpOnly: true,
       path: "/",
-      sameSite: "lax",
+      sameSite: "strict",
       secrets: ["your-secret"],
-      expires: new Date(Date.now() + 10 * 60 * 1000),
+      maxAge:60
     },
   });
