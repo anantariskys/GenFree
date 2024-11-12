@@ -1,11 +1,12 @@
 import React from "react";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
+import { User } from "@supabase/supabase-js";
 
-const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const PageLayout: React.FC<{ children: React.ReactNode ,user:User}> = ({ children,user }) => {
   return (
     <>
-      <Navbar />
+      <Navbar user={user} />
       {children}
       <Footer />
     </>
