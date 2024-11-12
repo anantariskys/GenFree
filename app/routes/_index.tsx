@@ -12,18 +12,22 @@ import Warning from "~/assets/warning.png";
 import Arrow from "~/assets/arrow.png";
 import IsuCard from "~/components/IsuCard";
 import { isuData } from "~/data/dummy";
+import { sessionStorage } from "~/utils/session";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const session = await supabase.auth.getSession();
+  const session = await sessionStorage.getSession(
+    request.headers.get("Cookie")
+  );
+  const userId = session.get("user_id");
 
-  if (!session.data.session) {
+  if (!userId) {
     return json({ user: null }, { status: 200 });
   }
 
   const userData = await supabase
     .from("profiles")
     .select()
-    .eq("user_id", session.data.session?.user.id)
+    .eq("user_id", userId)
     .single();
   if (!userData.data) {
     return json({ user: null }, { status: 200 });
@@ -92,8 +96,16 @@ export default function Index() {
         </main>
         <main className="container">
           <div className="bg-white rounded-xl relative p-4  md:p-24 space-y-8">
-            <img src={Warning} alt="decoration" className="absolute hidden md:block  w-48 top-0 left-0" />
-            <img src={Arrow} alt="decoration" className="absolute hidden md:block w-40 bottom-4 right-4" />
+            <img
+              src={Warning}
+              alt="decoration"
+              className="absolute hidden md:block  w-48 top-0 left-0"
+            />
+            <img
+              src={Arrow}
+              alt="decoration"
+              className="absolute hidden md:block w-40 bottom-4 right-4"
+            />
             <h1 className="text-2xl md:text-5xl font-bold text-center">
               ⚠️ Peringatan ⚠️ ️
             </h1>
