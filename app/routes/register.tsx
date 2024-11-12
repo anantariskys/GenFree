@@ -5,10 +5,13 @@ import AuthLayout from "~/components/auth/AuthLayout";
 import Input from "~/components/Input";
 import { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { supabase } from "~/utils/supabaseClient";
+import { sessionStorage } from "~/utils/session";
 
 export const loader: LoaderFunction = async ({ params, request }) => {
-  const session = await supabase.auth.getSession();
-  if (session.data.session) {
+  const session = await sessionStorage.getSession(request.headers.get("Cookie"));
+  const token = session.get("user_id");
+  
+  if (token) {
     return redirect("/");
   }
   return null;
