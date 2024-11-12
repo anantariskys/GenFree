@@ -1,40 +1,51 @@
-import { Form, Link, useActionData, redirect } from "@remix-run/react";
+import { Form, Link, useActionData, redirect  } from "@remix-run/react";
 import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
 import AuthLayout from "~/components/auth/AuthLayout";
 import { supabase } from "~/utils/supabaseClient";
+import { sessionStorage } from "~/utils/session";
 
 
-export const loader: LoaderFunction = async ({ params, request }) => {
-  const session = await supabase.auth.getSession()
-  if (session.data.session) {
+
+
+
+
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await sessionStorage.getSession(request.headers.get("Cookie"));
+  const token = session.get("user_id");
+  
+  if (token) {
     return redirect("/");
   }
   return null;
-}
-export const action : ActionFunction = async ({ request }) => {
+};
+
+export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
-  
   const { error, data } = await supabase.auth.signInWithPassword({
-    email :email,
-    password
-  })
+    email,
+    password,
+  });
 
-  
   if (error) {
     return json({ error: error.message }, { status: 400 });
   }
-  const session = await supabase.auth.getSession()
-  console.log(session.data.session?.user.id)
 
+  const session = await sessionStorage.getSession();
+  session.set("user_id", data.session.user.id);
 
-
-  return redirect("/");
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await sessionStorage.commitSession(session),
+    },
+  });
 };
+
 
 const Login = () => {
   const actionData = useActionData<{error?: string}>();
