@@ -1,15 +1,50 @@
-import { Form, Link } from "@remix-run/react";
-import React from "react";
-import Logo from "../assets/Logo.png";
-import { Icon } from "@iconify/react";
+import { Form, Link, useActionData, redirect } from "@remix-run/react";
+import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
 import AuthLayout from "~/components/auth/AuthLayout";
-const login = () => {
+import { supabase } from "~/utils/supabaseClient";
+
+
+export const loader: LoaderFunction = async ({ params, request }) => {
+  const session = await supabase.auth.getSession()
+  if (session.data.session) {
+    return redirect("/");
+  }
+  return null;
+}
+export const action : ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
+  
+  const { error, data } = await supabase.auth.signInWithPassword({
+    email :email,
+    password
+  })
+
+  
+  if (error) {
+    return json({ error: error.message }, { status: 400 });
+  }
+  const session = await supabase.auth.getSession()
+  console.log(session.data.session?.user.id)
+
+
+
+  return redirect("/");
+};
+
+const Login = () => {
+  const actionData = useActionData<{error?: string}>();
+
   return (
     <AuthLayout>
-      <Form className="w-full ">
-        <h1 className="font-bold text-2xl md:text-left text-center md:text-5xl">Masuk 👀</h1>
+      <Form method="post" className="w-full">
+        <h1 className="font-bold text-2xl md:text-left text-center md:text-5xl">
+          Masuk 👀
+        </h1>
         <div className="md:mt-8 space-y-4">
           <Input
             label="Email"
@@ -17,6 +52,7 @@ const login = () => {
             placeholder="masukkan email anda"
             type="email"
             icon="ic:round-email"
+            name="email"
           />
           <Input
             label="Password"
@@ -24,7 +60,11 @@ const login = () => {
             placeholder="masukkan password anda"
             type="password"
             icon="lucide:key-round"
+            name="password"
           />
+          {actionData?.error && (
+            <p className="text-red-500 text-sm">{actionData.error}</p>
+          )}
           <div className="flex justify-end">
             <small className="text-right">lupa password</small>
           </div>
@@ -43,4 +83,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;
