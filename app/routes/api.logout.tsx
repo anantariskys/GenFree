@@ -8,6 +8,6 @@ export const action: ActionFunction = async ({ request }) => {
     return new Response(logout.error.message, { status: 400 })
   } 
 
-  return redirect("/login")
+  return redirect("/")
   
 }
