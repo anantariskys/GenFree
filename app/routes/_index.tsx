@@ -43,7 +43,7 @@ export default function Index() {
         id="hero"
         className="h-screen bg-primary text-white relative overflow-hidden"
       >
-        <main className="flex hero relative z-20 container -bottom-10 flex-col items-center gap-4 h-full justify-center">
+        <main className="flex hero relative z-20 container -bottom-10 flex-col items-center gap-16 h-full justify-center">
           <img
             id="lamp"
             draggable="false"
@@ -72,7 +72,7 @@ export default function Index() {
             className="md:w-2/5"
           />
         </main>
-        <div className="min-h-[30%] absolute bottom-0 border-2 md:border-4 scale-150 md:scale-110 border-black w-full bg-secondary rounded-t-[100%]"></div>
+        <div className="min-h-[15%] absolute bottom-0 border-2 md:border-4 scale-150 md:scale-110 border-black w-full bg-secondary rounded-t-[100%]"></div>
       </section>
       <section className="bg-secondary space-y-8 py-16">
         <main className="container">
