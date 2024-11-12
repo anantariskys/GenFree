@@ -10,7 +10,7 @@ interface NavbarProps {
 }
 const Navbar: FC<NavbarProps> = ({ user }) => {
   return (
-    <nav className="w-full py-4 fixed top-0 bg-white">
+    <nav className="w-full py-2 fixed z-30 top-0 bg-white">
       <main className="container flex justify-between items-center ">
         <Link to={"/"}>
           <img src={Logo} className="w-44 " alt="" />
