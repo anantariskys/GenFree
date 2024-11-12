@@ -14,6 +14,7 @@ import { sessionStorage } from "~/utils/session";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await sessionStorage.getSession(request.headers.get("Cookie"));
+  console.log(request.headers.get("Cookie"))
   const token = session.get("user_id");
   
   if (token) {
@@ -38,6 +39,8 @@ export const action: ActionFunction = async ({ request }) => {
 
   const session = await sessionStorage.getSession();
   session.set("user_id", data.session.user.id);
+
+  
 
   return redirect("/", {
     headers: {
