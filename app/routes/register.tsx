@@ -8,9 +8,11 @@ import { supabase } from "~/utils/supabaseClient";
 import { sessionStorage } from "~/utils/session";
 
 export const loader: LoaderFunction = async ({ params, request }) => {
-  const session = await sessionStorage.getSession(request.headers.get("Cookie"));
+  const session = await sessionStorage.getSession(
+    request.headers.get("Cookie")
+  );
   const token = session.get("user_id");
-  
+
   if (token) {
     return redirect("/");
   }
@@ -21,8 +23,11 @@ export const action: ActionFunction = async ({ request }) => {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const gender = formData.get("gender") as string;
 
-  if (!name || !email || !password) {
+  console.log(gender)
+
+  if (!name || !email || !password || !gender) {
     return json({ error: "All fields are required" }, { status: 400 });
   }
 
@@ -35,15 +40,16 @@ export const action: ActionFunction = async ({ request }) => {
     return json({ error: error.message }, { status: 400 });
   }
 
+  const genderId = gender === "female" ? 0 : 1;
+
   const profile = await supabase
     .from("profiles")
-    .insert([{ name, user_id: data?.user?.id }]);
-
+    .insert([{ name, user_id: data?.user?.id, gender: genderId }]);
 
   if (profile.error) {
     return json({ error: profile.error.message }, { status: 400 });
   }
-  await supabase.auth.signOut()
+  await supabase.auth.signOut();
 
   return redirect("/login");
 };
@@ -84,6 +90,32 @@ const Register = () => {
             icon="lucide:key-round"
             name="password"
           />
+          <div className="flex items-center gap-4 space-y-2">
+            <label htmlFor="gender" className="md:text-xl text-base">
+              Gender
+            </label>
+            <div className="flex items-center space-x-4">
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="male"
+                  className="form-radio text-blue-600"
+                />
+                <span className="ml-2 text-gray-700">Male</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="female"
+                  className="form-radio text-pink-600"
+                />
+                <span className="ml-2 text-gray-700">Female</span>
+              </label>
+            </div>
+          </div>
+
           <div className="flex justify-end">
             <small className="text-right">lupa password</small>
           </div>
