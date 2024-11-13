@@ -34,7 +34,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
             <p className="py-1">Ham</p>
             <p className="py-1">Pembangunan</p>
           </Dropdown>
-          <p className="cursor-pointer">Tentang Kami</p>
+          <Link to={'/about'} className="cursor-pointer">Tentang Kami</Link>
           {user?.name ? (
             <Dropdown title={`Hi, ${user.name}`}>
               <p className="py-2">Profile</p>
@@ -81,7 +81,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
               <p className="py-1">Ham</p>
               <p className="py-1">Pembangunan</p>
             </Dropdown>
-            <p className="cursor-pointer">Tentang Kami</p>
+            <Link to={'/about'} className="cursor-pointer">Tentang Kami</Link>
             {user ? (
               <Dropdown title={user.name}>
                 <p className="py-2">Profile</p>
