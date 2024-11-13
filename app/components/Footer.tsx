@@ -1,10 +1,11 @@
 import { Link } from "@remix-run/react";
+import { FC } from "react";
 import Logo from "~/assets/Logo2.png";
 
-const Footer = () => {
+const Footer:FC<{variant?:boolean}> = ({variant=false}) => {
   return (
-    <footer className="bg-primary text-white relative pt-36 pb-12 overflow-hidden">
-      <div className="w-full min-h-24 bg-secondary absolute border-b-2 md:border-b-4 border-black top-0 rounded-b-[100%] scale-105"></div>
+    <footer className={`bg-primary text-white relative ${variant?"py-12":"pt-36 pb-12"}  overflow-hidden`}>
+      <div className={`w-full ${variant?"hidden":""}  min-h-24 bg-secondary absolute border-b-2 md:border-b-4 border-black top-0 rounded-b-[100%] scale-105`}></div>
       <main className="container space-y-4">
         <Link to={"/"}>
           <img src={Logo} className="md:w-44 w-32" alt="Logo" />
