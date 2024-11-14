@@ -8,6 +8,6 @@ export const sessionStorage = createCookieSessionStorage({
       path: "/",
       sameSite: "strict",
       secrets: ["your-secret"],
-      maxAge:60
+      maxAge:900
     },
   });
