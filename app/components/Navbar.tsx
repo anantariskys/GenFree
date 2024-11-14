@@ -37,7 +37,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
           <Link to={'/about'} className="cursor-pointer">Tentang Kami</Link>
           {user?.name ? (
             <Dropdown title={`Hi, ${user.name}`}>
-              <p className="py-2">Profile</p>
+              <Link to={'/profile'} className="py-2">Profile</Link>
               <Form method="post" action="/api/logout">
                 <Button width="w-fit">Keluar</Button>
               </Form>
@@ -84,7 +84,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
             <Link to={'/about'} className="cursor-pointer">Tentang Kami</Link>
             {user ? (
               <Dropdown title={user.name}>
-                <p className="py-2">Profile</p>
+                <Link to={'/profile'} className="py-2">Profile</Link>
                 <Form method="post" action="/api/logout">
                   <Button width="w-fit">Keluar</Button>
                 </Form>
