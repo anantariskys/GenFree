@@ -12,7 +12,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   );
   const userId = session.get("user_id");
 
-  console.log(userId);
 
   if (!userId) {
     return json({ user: null }, { status: 200 });
