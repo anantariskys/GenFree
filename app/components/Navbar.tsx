@@ -10,13 +10,17 @@ import { Icon } from "@iconify/react";
 interface NavbarProps {
   user: {
     name: string;
-  }|null;
+  } | null;
+  isu :{
+    name : string,
+    slug:string
+  }[]
 }
 
-const Navbar: FC<NavbarProps> = ({ user }) => {
+const Navbar: FC<NavbarProps> = ({ user , isu}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  
+  console.log(isu)
 
   return (
     <nav className="w-full py-2 fixed z-30 top-0 bg-white shadow-md font-semibold">
@@ -29,15 +33,23 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center justify-between gap-4">
           <Dropdown title="Isu">
-            <p className="py-1">Lingkungan</p>
-            <p className="py-1">Kebijakan</p>
-            <p className="py-1">Ham</p>
-            <p className="py-1">Pembangunan</p>
+            {
+              isu.map((item) => (
+                <Link key={item.slug} to={`/isu/${item.slug}`}>
+                  <p className="py-1">{item.name}</p>
+                </Link>
+              ))
+            }
+           
           </Dropdown>
-          <Link to={'/about'} className="cursor-pointer">Tentang Kami</Link>
+          <Link to={"/about"} className="cursor-pointer">
+            Tentang Kami
+          </Link>
           {user?.name ? (
             <Dropdown title={`Hi, ${user.name}`}>
-              <Link to={'/profile'} className="py-2">Profile</Link>
+              <Link to={"/profile"}>
+                <p className="py-2">Profile</p>
+              </Link>{" "}
               <Form method="post" action="/api/logout">
                 <Button width="w-fit">Keluar</Button>
               </Form>
@@ -81,10 +93,14 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
               <p className="py-1">Ham</p>
               <p className="py-1">Pembangunan</p>
             </Dropdown>
-            <Link to={'/about'} className="cursor-pointer">Tentang Kami</Link>
+            <Link to={"/about"} className="cursor-pointer">
+              Tentang Kami
+            </Link>
             {user ? (
               <Dropdown title={user.name}>
-                <Link to={'/profile'} className="py-2">Profile</Link>
+                <Link to={"/profile"}>
+                  <p className="py-2">Profile</p>
+                </Link>
                 <Form method="post" action="/api/logout">
                   <Button width="w-fit">Keluar</Button>
                 </Form>
