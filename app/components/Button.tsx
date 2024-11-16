@@ -2,7 +2,7 @@ import React, { ButtonHTMLAttributes, Children } from 'react'
 
 interface buttonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
    children : React.ReactNode,
-   variant? : 'primary'|'primary-outline',
+   variant? : 'primary'|'primary-outline'|'setuju'|'tolak',
    width? : 'w-full'|'w-fit',
   
 }
@@ -14,6 +14,12 @@ const Button:React.FC<buttonProps> = ({variant='primary',width='w-full',children
             break;
         case 'primary-outline':
             className='bg-transparent border  border-primary hover:bg-primary hover:text-white transition-colors text-primary'
+            break;
+        case 'setuju':
+            className='bg-green-500 border   hover:bg-green-600 text-white transition-colors '
+            break;
+        case 'tolak':
+            className='bg-red-500 border   hover:border-red-600 text-white transition-colors '
             break;
         default:
             break;
