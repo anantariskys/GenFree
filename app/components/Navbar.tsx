@@ -20,7 +20,6 @@ interface NavbarProps {
 const Navbar: FC<NavbarProps> = ({ user , isu}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  console.log(isu)
 
   return (
     <nav className="w-full py-2 fixed z-30 top-0 bg-white shadow-md font-semibold">
