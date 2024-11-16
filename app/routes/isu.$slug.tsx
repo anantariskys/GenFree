@@ -1,6 +1,13 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { json, LoaderFunction, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import {
+  ActionFunction,
+  json,
+  LoaderFunction,
+  redirect,
+} from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
+import Button from "~/components/Button";
+import CaseCard from "~/components/CaseCard";
 import IsuInformation from "~/components/IsuInformation";
 import PageLayout from "~/components/page/PageLayout";
 import { sessionStorage } from "~/utils/session";
@@ -21,10 +28,40 @@ export const loader: LoaderFunction = async ({ params, request }) => {
     request.headers.get("Cookie")
   );
   const userId = session.get("user_id");
-  const userProfile = await supabase.auth.getUser();
+
   if (!userId) {
     return redirect("/login");
   }
+
+  const cases = await supabase
+    .from("cases")
+    .select("*,isu(*),votes(*),comment(*,profiles(*))")
+    .eq("category_id", isu.data.id);
+
+console.log(cases);
+
+  let casesWithVoteCount = [];
+  if (cases.data) {
+    casesWithVoteCount = cases.data.map((caseItem) => ({
+      ...caseItem,
+      total_votes_agree: caseItem.votes.filter(
+        (vote: { agree: boolean }) => vote.agree === true
+      ).length,
+      total_votes_disagree: caseItem.votes.filter(
+        (vote: { agree: boolean }) => vote.agree === false
+      ).length,
+      total_votes: caseItem.votes.length,
+      isUserLiked: caseItem.votes.some(
+        (vote: { user_id: number }) => vote.user_id === userId
+      ),
+    }));
+  }
+
+
+
+
+  
+ 
 
   const userData = await supabase
     .from("profiles")
@@ -34,8 +71,51 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   if (!userData.data) {
     return json({ user: null }, { status: 200 });
   }
-  // console.log(isu.data.name);
-  return json({ isu: isu.data, user: userData.data ,allIsu:allIsu.data}, { status: 200 });
+  return json(
+    {
+      isu: isu.data,
+      user: userData.data,
+      allIsu: allIsu.data,
+      cases: casesWithVoteCount,
+    },
+    { status: 200 }
+  );
+};
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+
+  const event = formData.get("event") as string;
+  if (event === "vote") {
+    const case_id = formData.get("case_id") as string;
+    const isAgreed = formData.get("isAgreed") as string;
+    const user_id = await supabase.auth.getUser();
+    const vote = await supabase
+      .from("votes")
+      .insert({
+        case_id,
+        user_id: user_id.data.user?.id,
+        agree: isAgreed === "1" ? true : false,
+      });
+
+    if (vote.error) {
+      console.log(vote.error);
+      return json({ success: false }, { status: 200 });
+    }
+
+    return json({ success: true }, { status: 200 });
+  }
+
+  if (event === "comment") {
+    const case_id = formData.get("case_id") as string;
+    const comment = formData.get("comment") as string;
+
+    console.log(case_id, comment);
+    // const user_id = await supabase.auth.getUser();
+    // const vote = await supabase.from("comments").insert({case_id,user_id:user_id.data.user?.id,comment:comment});
+  }
+
+  return null;
 };
 const IsuPage = () => {
   const loaderData = useLoaderData<{
@@ -47,7 +127,34 @@ const IsuPage = () => {
       gender: number;
     };
     allIsu: { name: string; slug: string }[];
+    cases: {
+      id: number;
+      title: string;
+      description: string;
+      image?: string;
+      isu: {
+        name: string;
+        slug: string;
+      };
+      votes: {
+        user_id: number;
+      }[];
+      total_votes_agree: number;
+      total_votes_disagree: number;
+      total_votes: number;
+      isUserLiked: boolean;
+      comment: {
+        id: number;
+        content: string;
+        user_id: number;
+        created_at: string;
+        profiles: {
+          display_name: string;
+        };
+      }[]
+    }[];
   }>();
+
   return (
     <PageLayout isu={loaderData.allIsu} variant user={loaderData.user}>
       <section className="h-screen flex items-center container  ">
@@ -93,24 +200,19 @@ const IsuPage = () => {
           primis in faucibus orci luctus et ultrices posuere cubilia curae;
         </IsuInformation>
       </section>
-      <section className="container py-8 space-y-4">
+      <section className="mx-auto max-w-6xl py-8 space-y-4">
         <h1 className="text-4xl font-bold">Ruang Diskusi </h1>
-        <main className="w-full flex items-start gap-8">
+        <main className="w-full  mx-auto flex items-start gap-8">
           <div className="w-full space-y-4">
-            <div className="bg-white relative space-y-4 border-l-4 border-primary  shadow py-8 px-16 rounded-xl">
-
-         
-              <h2 className="text-2xl font-bold">Judul studi Kasus</h2>
-              <img src="https://random-image-pepebigotes.vercel.app/api/random-image" alt="img" className="w-full h-auto rounded-lg " />
-              <p>(Deskripsi Studi Kasus) Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus tristique interdum orci et scelerisque. Praesent at vestibulum enim. In hac habitasse platea dictumst. Integer non nulla et magna maximus finibus ac vel turpis. Maecenas sagittis ligula vitae neque blandit volutpat. Vivamus orci arcu, sollicitudin ac semper et, varius eu nisi. Cras pellentesque justo nec neque lobortis tincidunt. Nullam sed purus in quam eleifend condimentum vitae nec est. Maecenas tincidunt diam nec diam fermentum, in fringilla est lobortis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;</p>
-
-            </div>
-
+            {loaderData.cases.length > 0 ? (
+              loaderData.cases.map((caseItem) => (
+                <CaseCard props={caseItem} key={caseItem.id} />
+              ))
+            ) : (
+              <small>belum ada studi kasus</small>
+            )}
           </div>
-          <aside className="p-4 rounded-lg shadow-md border max-w-sm w-full">
-
-          </aside>
-
+          <aside className="p-4 rounded-lg shadow-md border max-w-xs w-full"></aside>
         </main>
       </section>
     </PageLayout>
