@@ -1,4 +1,4 @@
-import { json, LoaderFunction } from "@remix-run/node";
+import { json, LoaderFunction, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import React from "react";
 import PageLayout from "~/components/page/PageLayout";
@@ -12,6 +12,10 @@ export const loader: LoaderFunction = async ({ request }) => {
   );
   const userId = session.get("user_id");
 
+  const allIsu = await supabase.from("isu").select("*");
+  if (allIsu.error) {
+    return redirect("/");
+  }
 
   if (!userId) {
     return json({ user: null }, { status: 200 });
@@ -26,14 +30,17 @@ export const loader: LoaderFunction = async ({ request }) => {
     return json({ user: null }, { status: 200 });
   }
 
-  return json({ user: userData.data }, { status: 200 });
+  return json({ user: userData.data, allIsu: allIsu.data }, { status: 200 });
 };
 
 const about = () => {
-  const user = useLoaderData<{ user: { name: string } }>();
+  const user = useLoaderData<{
+    user: { name: string };
+    allIsu: { name: string; slug: string }[];
+  }>();
 
   return (
-    <PageLayout variant user={user.user}>
+    <PageLayout isu={user.allIsu} variant user={user.user}>
       <section className="h-screen relative flex justify-center items-center">
         <main className="container flex items-center">
           <div className="md:w-1/2 space-y-4">
@@ -80,52 +87,55 @@ const about = () => {
         </div>
       </section>
       <section className="container  py-4 space-y-4">
-        <h1 className="text-3xl font-semibold text-center text-primary">Kenapa Gen-Free?</h1>
+        <h1 className="text-3xl font-semibold text-center text-primary">
+          Kenapa Gen-Free?
+        </h1>
 
         <div className="flex justify-center gap-16">
           <div className="w-full max-w-lg rounded-xl p-2 border flex gap-4 items-center">
-            <div className="min-w-24 aspect-square bg-gray-500 rounded-lg">
-
-            </div>
+            <div className="min-w-24 aspect-square bg-gray-500 rounded-lg"></div>
             <div className="">
-                <h1 className="font-semibold text-3xl">Lorem Ipsum</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ut laoreet nisl. </p>
+              <h1 className="font-semibold text-3xl">Lorem Ipsum</h1>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Maecenas ut laoreet nisl.{" "}
+              </p>
             </div>
           </div>
           <div className="w-full max-w-lg rounded-xl p-2 border flex gap-4 items-center">
-            <div className="min-w-24 aspect-square bg-gray-500 rounded-lg">
-
-            </div>
+            <div className="min-w-24 aspect-square bg-gray-500 rounded-lg"></div>
             <div className="">
-                <h1 className="font-semibold text-3xl">Lorem Ipsum</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ut laoreet nisl. </p>
+              <h1 className="font-semibold text-3xl">Lorem Ipsum</h1>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Maecenas ut laoreet nisl.{" "}
+              </p>
             </div>
           </div>
-      
         </div>
         <div className="flex justify-center gap-16">
-        <div className="w-full max-w-lg rounded-xl p-2 border flex gap-4 items-center">
-            <div className="min-w-24 aspect-square bg-gray-500 rounded-lg">
-
-            </div>
+          <div className="w-full max-w-lg rounded-xl p-2 border flex gap-4 items-center">
+            <div className="min-w-24 aspect-square bg-gray-500 rounded-lg"></div>
             <div className="">
-                <h1 className="font-semibold text-3xl">Lorem Ipsum</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ut laoreet nisl. </p>
+              <h1 className="font-semibold text-3xl">Lorem Ipsum</h1>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Maecenas ut laoreet nisl.{" "}
+              </p>
             </div>
           </div>
           <div className="w-full max-w-lg rounded-xl p-2 border flex gap-4 items-center">
-            <div className="min-w-24 aspect-square bg-gray-500 rounded-lg">
-
-            </div>
+            <div className="min-w-24 aspect-square bg-gray-500 rounded-lg"></div>
             <div className="">
-                <h1 className="font-semibold text-3xl">Lorem Ipsum</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ut laoreet nisl. </p>
+              <h1 className="font-semibold text-3xl">Lorem Ipsum</h1>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Maecenas ut laoreet nisl.{" "}
+              </p>
             </div>
           </div>
         </div>
-        <div>
-
-        </div>
+        <div></div>
       </section>
     </PageLayout>
   );
