@@ -1,4 +1,4 @@
-import { json, type LoaderFunction } from "@remix-run/node";
+import { json, redirect, type LoaderFunction } from "@remix-run/node";
 import { gsap } from "gsap";
 import { useLoaderData } from "@remix-run/react";
 import { User } from "@supabase/supabase-js";
@@ -19,11 +19,10 @@ export const loader: LoaderFunction = async ({ request }) => {
     request.headers.get("Cookie")
   );
   const userId = session.get("user_id");
-
-  console.log(userId)
+  const isu = await supabase.from("isu").select("*");
 
   if (!userId) {
-    return json({ user: null }, { status: 200 });
+    return json({ user: null, isu: isu.data }, { status: 200 });
   }
 
   const userData = await supabase
@@ -32,19 +31,25 @@ export const loader: LoaderFunction = async ({ request }) => {
     .eq("user_id", userId)
     .single();
   if (!userData.data) {
-    return json({ user: null }, { status: 200 });
+    return json({ user: null, isu: isu.data }, { status: 200 });
   }
 
-  return json({ user: userData.data }, { status: 200 });
+  return json({ user: userData.data, isu: isu.data }, { status: 200 });
 };
 
 export default function Index() {
-  const user = useLoaderData<{ user: { name: string } }>();
-
-  useEffect(() => {}, []);
+  const user = useLoaderData<{
+    user: { name: string };
+    isu: {
+      name: string;
+      slug: string;
+      description: string;
+      heading_text: string;
+    }[];
+  }>();
 
   return (
-    <PageLayout user={user.user}>
+    <PageLayout isu={user.isu} user={user.user}>
       <section
         id="hero"
         className="h-screen bg-primary text-white relative overflow-hidden"
@@ -90,8 +95,13 @@ export default function Index() {
               Diskusi isu-isu Populer 🔥
             </h1>
             <div className="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-4">
-              {isuData.map((item) => (
-                <IsuCard description={item.description} title={item.title} />
+              {user.isu.map((item) => (
+                <IsuCard
+                  slug={item.slug}
+                  key={item.slug}
+                  description={item.description}
+                  title={item.heading_text}
+                />
               ))}
             </div>
           </div>
@@ -122,6 +132,32 @@ export default function Index() {
               “Tetap Bijak, Suarakan dengan Santun. Pendapatmu Berarti, Jangan
               Sampai Menyakiti.”
             </p>
+          </div>
+        </main>
+        <main className="container">
+          <div className="bg-white rounded-xl md:px-8 md:py-16 p-4 space-y-4 md:space-y-8">
+            <h1 className="text-2xl md:text-5xl font-bold text-center">
+              Caranya Gimana Sih? 🤔
+            </h1>
+            <div className="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-4">
+              {Array.from({ length: 4 }).map((item, index) => (
+                <div
+                  key={index}
+                  className="w-full rounded-lg p-6 border shadow-2xl space-y-3"
+                >
+                  <div className="bg-primary w-fit p-3 rounded-lg bg-opacity-25">
+                    <h1 className="bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold w-12 aspect-square">
+                      {index + 1}
+                    </h1>
+                  </div>
+                  <h3 className="text-xl font-bold">Pilih Isu yang Menarik</h3>
+                  <p>
+                    Temukan topik diskusi yang menarik minatmu. Mulai dari isu
+                    lingkungan, kebijakan, hingga hak asasi manusia.
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </main>
       </section>
