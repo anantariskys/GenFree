@@ -19,7 +19,7 @@ const Button:React.FC<buttonProps> = ({variant='primary',width='w-full',children
             break;
     }
   return (
-    <button type={type} className={`${className} ${width} px-8 py-2 active:scale-95 duration-300  rounded `}>
+    <button type={type} className={`${className} ${width} px-8 py-2 active:scale-95 h-fit duration-300  rounded `}>
         {children}
     </button>
   )
