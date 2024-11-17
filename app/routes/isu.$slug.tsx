@@ -102,7 +102,7 @@ export const action: ActionFunction = async ({ request }) => {
       return json({ success: false }, { status: 200 });
     }
 
-    return json({ success: true }, { status: 200 });
+    return json({ success: `anda vote ${isAgreed==="1"?'setuju':'tidak setuju'}` }, { status: 200 });
   }
 
   if (event === "comment") {
@@ -118,7 +118,9 @@ export const action: ActionFunction = async ({ request }) => {
       request.headers.get("Cookie")
     );
     const userId = session.get("user_id");
-    const vote = await supabase.from('votes').select('*').eq('user_id',userId).single();
+    const vote = await supabase.from('votes').select('*').eq('user_id',userId).eq('case_id',case_id).single();
+
+  
     const comments = await supabase.from("comment").insert({case_id,user_id:userId,content  :comment,vote_id:vote.data.id});
     return json({ success: "Opini berhasil ditambahkan" }, { status: 200 });
   }
