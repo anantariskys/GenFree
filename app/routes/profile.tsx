@@ -51,14 +51,14 @@ export const action: ActionFunction = async ({ request }) => {
   const display_name = formData.get("display_name") as string;
   const user_id = await supabase.auth.getUser();
 
-  console.log(user_id);
+
 
   const { data, error } = await supabase
     .from("profiles")
     .update({ name: nama, display_name: display_name })
     .eq("user_id", user_id.data.user?.id);
 
-  console.log(data, error);
+
   return null;
 };
 const profile = () => {
