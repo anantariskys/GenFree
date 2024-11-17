@@ -35,10 +35,9 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 
   const cases = await supabase
     .from("cases")
-    .select("*,isu(*),votes(*),comment(*,profiles(*))")
+    .select("*,isu(*),votes(*),comment(*,profiles(*),votes(*))")
     .eq("category_id", isu.data.id);
 
-console.log(cases);
 
   let casesWithVoteCount = [];
   if (cases.data) {
@@ -110,9 +109,18 @@ export const action: ActionFunction = async ({ request }) => {
     const case_id = formData.get("case_id") as string;
     const comment = formData.get("comment") as string;
 
-    console.log(case_id, comment);
-    // const user_id = await supabase.auth.getUser();
-    // const vote = await supabase.from("comments").insert({case_id,user_id:user_id.data.user?.id,comment:comment});
+    if (!comment) {
+      return json({ error: "Comment is required" }, { status: 400 });
+    }
+
+
+    const session = await sessionStorage.getSession(
+      request.headers.get("Cookie")
+    );
+    const userId = session.get("user_id");
+    const vote = await supabase.from('votes').select('*').eq('user_id',userId).single();
+    const comments = await supabase.from("comment").insert({case_id,user_id:userId,content  :comment,vote_id:vote.data.id});
+    return json({ success: "Opini berhasil ditambahkan" }, { status: 200 });
   }
 
   return null;
@@ -150,10 +158,15 @@ const IsuPage = () => {
         created_at: string;
         profiles: {
           display_name: string;
+          gender: number;
         };
+        votes:{
+          agree: boolean
+        }
       }[]
     }[];
   }>();
+
 
   return (
     <PageLayout isu={loaderData.allIsu} variant user={loaderData.user}>
