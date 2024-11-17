@@ -8,6 +8,7 @@ import {
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 
 import "./tailwind.css";
+import ToastProvider from "./components/ToastProvider";
 
 
 export const meta: MetaFunction = () => {
@@ -41,7 +42,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <ToastProvider>
         {children}
+        </ToastProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
