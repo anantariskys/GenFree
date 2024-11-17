@@ -1,22 +1,25 @@
-import { Form, Link, useActionData, redirect  } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useActionData,
+  redirect,
+  useNavigation,
+} from "@remix-run/react";
 import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
 import AuthLayout from "~/components/auth/AuthLayout";
 import { supabase } from "~/utils/supabaseClient";
 import { sessionStorage } from "~/utils/session";
-
-
-
-
-
-
+import { useToast } from "~/components/ToastProvider";
+import { useEffect, useRef } from "react";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const session = await sessionStorage.getSession(request.headers.get("Cookie"));
-  console.log(request.headers.get("Cookie"))
+  const session = await sessionStorage.getSession(
+    request.headers.get("Cookie")
+  );
   const token = session.get("user_id");
-  
+
   if (token) {
     return redirect("/");
   }
@@ -40,8 +43,6 @@ export const action: ActionFunction = async ({ request }) => {
   const session = await sessionStorage.getSession();
   session.set("user_id", data.session.user.id);
 
-  
-
   return redirect("/", {
     headers: {
       "Set-Cookie": await sessionStorage.commitSession(session),
@@ -49,13 +50,30 @@ export const action: ActionFunction = async ({ request }) => {
   });
 };
 
-
 const Login = () => {
-  const actionData = useActionData<{error?: string}>();
+  const actionData = useActionData<{ error?: string }>();
+  const { showToast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
+  useEffect(() => {
+  
+    if (actionData?.error) {
+      showToast(actionData.error, "error");
+    }
+  }, [actionData, showToast]);
+
+
+  useEffect(() => {
+    if (!isSubmitting && formRef.current) {
+      formRef.current.reset();
+    }
+  }, [isSubmitting]);
 
   return (
     <AuthLayout>
-      <Form method="post" className="w-full">
+      <Form ref={formRef} method="post" className="w-full">
         <h1 className="font-bold text-2xl md:text-left text-center md:text-5xl">
           Masuk 👀
         </h1>
@@ -76,14 +94,11 @@ const Login = () => {
             icon="lucide:key-round"
             name="password"
           />
-          {actionData?.error && (
-            <p className="text-red-500 text-sm">{actionData.error}</p>
-          )}
           <div className="flex justify-end">
             <small className="text-right">lupa password</small>
           </div>
-          <Button type="submit" width="w-full">
-            Masuk
+          <Button type="submit" width="w-full" disabled={isSubmitting}>
+            {isSubmitting ? "Loading..." : "Masuk"}
           </Button>
           <p className="text-center md:text-base text-sm">
             belum punya akun?{" "}
