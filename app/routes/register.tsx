@@ -1,11 +1,12 @@
-import React from "react";
-import { Form, json, Link, redirect, useActionData } from "@remix-run/react";
+import React, { useEffect, useRef } from "react";
+import { Form, json, Link, redirect, useActionData, useNavigation } from "@remix-run/react";
 import Button from "~/components/Button";
 import AuthLayout from "~/components/auth/AuthLayout";
 import Input from "~/components/Input";
 import { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { supabase } from "~/utils/supabaseClient";
 import { sessionStorage } from "~/utils/session";
+import { useToast } from "~/components/ToastProvider";
 
 export const loader: LoaderFunction = async ({ params, request }) => {
   const session = await sessionStorage.getSession(
@@ -55,6 +56,24 @@ export const action: ActionFunction = async ({ request }) => {
 };
 const Register = () => {
   const actionData = useActionData<{ error?: string }>();
+  const { showToast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
+  useEffect(() => {
+  
+    if (actionData?.error) {
+      showToast(actionData.error, "error");
+    }
+  }, [actionData, showToast]);
+
+
+  useEffect(() => {
+    if (!isSubmitting && formRef.current) {
+      formRef.current.reset();
+    }
+  }, [isSubmitting]);
 
   return (
     <AuthLayout>
@@ -62,9 +81,7 @@ const Register = () => {
         <h1 className="font-bold text-2xl md:text-left text-center md:text-5xl">
           Daftar 👀
         </h1>
-        {actionData?.error && (
-          <p className="text-red-500 text-center mb-4">{actionData.error}</p>
-        )}
+    
         <div className="md:mt-8 space-y-4">
           <Input
             label="Nama"
@@ -119,8 +136,8 @@ const Register = () => {
           <div className="flex justify-end">
             <small className="text-right">lupa password</small>
           </div>
-          <Button type="submit" width="w-full">
-            Daftar
+          <Button type="submit" width="w-full" disabled={isSubmitting}>
+          {isSubmitting ? "Loading..." : "Daftar"}
           </Button>
           <p className="text-center md:text-base text-sm">
             udah punya akun?{" "}
