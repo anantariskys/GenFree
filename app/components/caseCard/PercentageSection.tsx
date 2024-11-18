@@ -12,7 +12,7 @@ interface cardProps {
 }
 const PercentageSection: React.FC<cardProps> = ({ props }) => {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex md:flex-row flex-col items-center gap-4">
       <PercentageCard
         total_votes={props.total_votes}
         votes={props.total_votes_agree}
