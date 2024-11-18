@@ -38,10 +38,16 @@ interface cardProps {
         agree: boolean;
       };
     }[];
+  }
+  user:{
+    name: string;
+    display_name: string;
+    user_id: number;
+    gender: number;
   };
 }
 
-const CaseCard: React.FC<cardProps> = ({ props }) => {
+const CaseCard: React.FC<cardProps> = ({ props,user }) => {
   const actionData = useActionData<{ error?: string; success?: string }>();
   const { showToast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
@@ -64,14 +70,14 @@ const CaseCard: React.FC<cardProps> = ({ props }) => {
   }, [isSubmitting]);
 
   return (
-    <div className="bg-white relative space-y-2 border-l-4 border-primary  shadow py-4 px-8 rounded-xl">
-      <h2 className="text-xl font-bold">{props.title}</h2>
+    <div className="bg-white relative space-y-2 border-l-4 border-primary  shadow py-4 md:px-8 px-3 rounded-xl">
+      <h2 className="text-base md:text-xl font-bold">{props.title}</h2>
       {props.image && (
         <img src={props.image} alt="img" className="w-1/3 h-auto rounded-lg " />
       )}
 
       <article
-        className="text-sm prose-sm prose"
+        className=" prose-sm  prose"
         dangerouslySetInnerHTML={{ __html: props.description }}
       ></article>
       {props.isUserLiked ? (
@@ -102,7 +108,7 @@ const CaseCard: React.FC<cardProps> = ({ props }) => {
           <section className="space-y-4">
             <h4 className="font-bold">{props.comment.length} Balasan</h4>
             {props.comment.length > 0 &&
-              props.comment.map((comment) => <CommentCard comment={comment} />)}
+              props.comment.map((comment) => <CommentCard user={user} comment={comment} />)}
           </section>
         </>
       ) : (
