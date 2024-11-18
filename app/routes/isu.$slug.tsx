@@ -172,24 +172,24 @@ const IsuPage = () => {
 
   return (
     <PageLayout isu={loaderData.allIsu} variant user={loaderData.user}>
-      <section className="h-screen flex items-center container  ">
-        <main className="w-1/2  space-y-4">
-          <h1 className="text-6xl font-bold">
+      <section className="md:h-screen flex py-24 md:flex-row flex-col items-center container  ">
+        <main className="md:w-1/2  space-y-4">
+          <h1 className="lg:text-6xl md:text-5xl text-4xl font-bold">
             Ruang Diskusi Isu <br />{" "}
             <span className="text-secondary">{loaderData.isu.name}</span>
           </h1>
-          <p className="text-lg">
+          <p className="text-base md:text-lg">
             Tempat untuk berbagi pandangan dan berdiskusi tentang isu-isu
             lingkungan terkini
           </p>
-          <p className="flex text-primary font-medium items-center gap-1">
+          <p className="flex text-primary md:text-base text-sm font-medium items-center gap-1">
             mulai diskusi
             <Icon icon={"ic:round-play-arrow"} />
           </p>
         </main>
-        <div className="w-1/2 aspect-[8/5] rounded-lg bg-gray-200"></div>
+        <div className="md:w-1/2 w-full aspect-[8/5] rounded-lg bg-gray-200"></div>
       </section>
-      <section className="container py-8 space-y-8">
+      <section className="container py-4 md:py-8 space-y-4 md:space-y-8">
         <IsuInformation title="Peringatan ⚠">
           {" "}
           Ruang ini berisi studi kasus. Suaramu penting, tapi ingatlah untuk
@@ -215,13 +215,13 @@ const IsuPage = () => {
           primis in faucibus orci luctus et ultrices posuere cubilia curae;
         </IsuInformation>
       </section>
-      <section className="mx-auto max-w-6xl py-8 space-y-4">
+      <section className="mx-auto container max-w-7xl py-8 space-y-4">
         <h1 className="text-4xl font-bold">Ruang Diskusi </h1>
-        <main className="w-full  mx-auto flex items-start gap-8">
+        <main className="w-full  mx-auto flex md:flex-row flex-col-reverse items-start gap-8">
           <div className="w-full space-y-4">
             {loaderData.cases.length > 0 ? (
               loaderData.cases.map((caseItem) => (
-                <CaseCard props={caseItem} key={caseItem.id} />
+                <CaseCard user={loaderData.user} props={caseItem} key={caseItem.id} />
               ))
             ) : (
               <small>belum ada studi kasus</small>
