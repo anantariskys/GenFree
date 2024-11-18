@@ -24,7 +24,7 @@ const PercentageCard: React.FC<cardProps> = ({
       break;
   }
   return (
-    <div className="p-2 rounded border flex-1 flex items-center gap-2">
+    <div className="p-2 rounded border w-full md:flex-1 flex items-center gap-2">
       <div className={`${className} w-10 aspect-square rounded-full  flex justify-center items-center`}>
         <Icon icon={"material-symbols:check"} className="text-white text-2xl" />
       </div>
