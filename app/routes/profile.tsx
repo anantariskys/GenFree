@@ -10,10 +10,8 @@ import PageLayout from "~/components/page/PageLayout";
 import { sessionStorage } from "~/utils/session";
 import { supabase } from "~/utils/supabaseClient";
 import ProfileImg from "~/assets/profileHeading.png";
-import AvatarBoy from "~/assets/avatar_boy.png";
-import AvatarGirl from "~/assets/avatar_girl.png";
-import Input from "~/components/Input";
-import Button from "~/components/Button";
+import ProfileSection from "~/components/profile/ProfileSection";
+import FormProfile from "~/components/profile/FormProfile";
 export const loader: LoaderFunction = async ({ params, request }) => {
   const session = await sessionStorage.getSession(
     request.headers.get("Cookie")
@@ -51,15 +49,27 @@ export const action: ActionFunction = async ({ request }) => {
   const display_name = formData.get("display_name") as string;
   const user_id = await supabase.auth.getUser();
 
+  if (!user_id.data.user?.id) {
+    return redirect("/login");
+  }
 
+  if (!nama) {
+    return json({ error: "Nama tidak boleh kosong" }, { status: 400 });
+  }
+
+  if (!display_name) {
+    return json({ error: "Nama tampilan tidak boleh kosong" }, { status: 400 });
+  }
 
   const { data, error } = await supabase
     .from("profiles")
     .update({ name: nama, display_name: display_name })
     .eq("user_id", user_id.data.user?.id);
+  if (error) {
+    return json({ error: error.message }, { status: 400 });
+  }
 
-
-  return null;
+  return json({ success: "Profile updated successfully" }, { status: 200 });
 };
 const profile = () => {
   const user = useLoaderData<{
@@ -84,45 +94,8 @@ const profile = () => {
       </section>
       <section className="container py-8">
         <main className="border-2 max-w-5xl mx-auto rounded-2xl py-4 px-16 space-y-4">
-          <div className="flex items-center gap-4">
-            <img
-              src={user.user.gender === 1 ? AvatarBoy : AvatarGirl}
-              className="border-2 rounded-full w-28"
-              alt="avatar-img"
-              draggable="false"
-            />
-            <div>
-              <h3 className="text-3xl font-medium">{user.user.name}</h3>
-              <p>{user.userProfile.user.email}</p>
-            </div>
-          </div>
-          <Form method="post" className="grid grid-cols-2 gap-4 ">
-            <Input
-              id="nama"
-              label="Nama"
-              placeholder="Alif Nur Sanubari"
-              value={user.user.name}
-              name="nama"
-            />
-            <Input
-              id="display_name"
-              label="Nama Tampilan"
-              placeholder="Mohon isi nama tampilan"
-              value={user.user.display_name}
-              name="display_name"
-            />
-            <Input
-              disabled
-              id="email"
-              label="Email"
-              value={user.userProfile.user.email}
-              placeholder="Mohon isi email"
-              name="email"
-            />
-            <div className="flex items-end">
-              <Button width="w-fit">Simpan</Button>
-            </div>
-          </Form>
+          <ProfileSection user={user} />
+          <FormProfile user={user} />
         </main>
       </section>
     </PageLayout>
