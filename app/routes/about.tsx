@@ -6,6 +6,11 @@ import { sessionStorage } from "~/utils/session";
 import { supabase } from "~/utils/supabaseClient";
 
 import HeroImg from "~/assets/about-hero.png";
+import VisionMissionCard from "~/components/VisionMissionCard";
+import SectionLayout from "~/components/about/SectionLayout";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { whyData } from "~/data/dummy";
+import WhyCard from "~/components/about/WhyCard";
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await sessionStorage.getSession(
     request.headers.get("Cookie")
@@ -18,7 +23,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 
   if (!userId) {
-    return json({ user: null }, { status: 200 });
+    return json({ user: null, allIsu: allIsu.data }, { status: 200 });
   }
 
   const userData = await supabase
@@ -62,81 +67,67 @@ const about = () => {
           </div>
         </main>
       </section>
-      <section className="container py-10 justify-evenly flex items-center">
-        <div className="max-w-lg w-full p-4 space-y-2">
-          <h3 className="text-3xl font-semibold text-secondary">
-            Visi Gen-Free
-          </h3>
-          <h1 className="text-5xl font-semibold">Lorem Ipsum</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ut
-            laoreet nisl. Morbi neque augue, sagittis ac arcu ac, tristique
-            sodales risus. Etiam maximus est non dui tristique ornare.
-          </p>
-        </div>
-        <div className="max-w-lg w-full p-4 space-y-2">
-          <h3 className="text-3xl font-semibold text-secondary">
-            Misi Gen-Free
-          </h3>
-          <h1 className="text-5xl font-semibold">Lorem Ipsum</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ut
-            laoreet nisl. Morbi neque augue, sagittis ac arcu ac, tristique
-            sodales risus. Etiam maximus est non dui tristique ornare.
-          </p>
-        </div>
-      </section>
-      <section className="container  py-4 space-y-4">
-        <h1 className="text-3xl font-semibold text-center text-primary">
-          Kenapa Gen-Free?
-        </h1>
 
-        <div className="flex justify-center gap-16">
-          <div className="w-full max-w-lg rounded-xl p-2 border flex gap-4 items-center">
-            <div className="min-w-24 aspect-square bg-gray-500 rounded-lg"></div>
-            <div className="">
-              <h1 className="font-semibold text-3xl">Lorem Ipsum</h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Maecenas ut laoreet nisl.{" "}
-              </p>
+      <SectionLayout title="Visi dan Misi Gen-Free">
+        <main className="justify-evenly flex items-start">
+          <VisionMissionCard
+            title="Visi Gen-Free"
+            description="Ekosistem Demokrasi"
+          >
+            <p>
+              Menciptakan ekosistem demokrasi yang inklusif, dinamis, serta
+              mendorong pemuda agar berperan aktif dalam perubahan sosial,
+              politik, dan kebijakan untuk membangun masa depan yang berkeadilan
+              dan berkelanjutan.
+            </p>
+          </VisionMissionCard>
+
+          <VisionMissionCard
+            title="Misi Gen-Free"
+            description="Partisipasi Aktif"
+          >
+            <ol className="list-decimal ">
+              <li>Mendorong Partisipasi Aktif Pemuda sebagai Agen Perubahan</li>
+              <li>Mengadvokasi Isu-isu yang Berdampak pada Generasi Muda</li>
+              <li>
+                Memanfaatkan Teknologi sebagai Ruang Aman yang Bersifat
+                Anonimitas.
+              </li>
+            </ol>
+            <p className="font-bold">
+              (democratic innovation: digital participation)
+            </p>
+          </VisionMissionCard>
+        </main>
+      </SectionLayout>
+      <SectionLayout title="Kenapa Gen-Free?">
+        <main className="grid max-w-6xl mx-auto grid-cols-1 md:grid-cols-2 gap-4 ">
+          {whyData.map((item, index) => (
+            <WhyCard
+              key={index}
+              icon={item.icon}
+              title={item.title}
+              description={item.description}
+            />
+          ))}
+        </main>
+      </SectionLayout>
+      <SectionLayout title="Di Balik GEN-FREE">
+        <main className="grid max-w-6xl mx-auto md:grid-cols-3 grid-cols-1 gap-x-4 gap-y-8 ">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <div key={index} className="w-full   rounded-lg ">
+              <img
+                src="https://xsgames.co/randomusers/avatar.php?g=male"
+                className="w-full aspect-square rounded-3xl bg-gray-100 object-cover"
+                alt={`image ${index}`}
+                draggable='false'
+              />
+              <h5 className="text-2xl font-semibold">Lorem Ipsum</h5>
+              <p className=" ">Lorem, ipsum.</p>
             </div>
-          </div>
-          <div className="w-full max-w-lg rounded-xl p-2 border flex gap-4 items-center">
-            <div className="min-w-24 aspect-square bg-gray-500 rounded-lg"></div>
-            <div className="">
-              <h1 className="font-semibold text-3xl">Lorem Ipsum</h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Maecenas ut laoreet nisl.{" "}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-center gap-16">
-          <div className="w-full max-w-lg rounded-xl p-2 border flex gap-4 items-center">
-            <div className="min-w-24 aspect-square bg-gray-500 rounded-lg"></div>
-            <div className="">
-              <h1 className="font-semibold text-3xl">Lorem Ipsum</h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Maecenas ut laoreet nisl.{" "}
-              </p>
-            </div>
-          </div>
-          <div className="w-full max-w-lg rounded-xl p-2 border flex gap-4 items-center">
-            <div className="min-w-24 aspect-square bg-gray-500 rounded-lg"></div>
-            <div className="">
-              <h1 className="font-semibold text-3xl">Lorem Ipsum</h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Maecenas ut laoreet nisl.{" "}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div></div>
-      </section>
+          ))}
+        </main>
+      </SectionLayout>
     </PageLayout>
   );
 };
