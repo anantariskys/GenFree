@@ -33,6 +33,7 @@ interface cardProps {
       profiles: {
         display_name: string;
         gender: number;
+        role:boolean
       };
       votes: {
         agree: boolean;
@@ -44,6 +45,7 @@ interface cardProps {
     display_name: string;
     user_id: number;
     gender: number;
+    role:boolean
   };
 }
 
