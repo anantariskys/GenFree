@@ -135,6 +135,7 @@ const IsuPage = () => {
       display_name: string;
       user_id: number;
       gender: number;
+      role:boolean
     };
     allIsu: { name: string; slug: string }[];
     cases: {
@@ -161,6 +162,7 @@ const IsuPage = () => {
         profiles: {
           display_name: string;
           gender: number;
+          role:boolean
         };
         votes:{
           agree: boolean
