@@ -13,6 +13,7 @@ interface Comment {
   profiles: {
     display_name: string;
     gender: number;
+    role:boolean
   };
   votes: {
     agree: boolean;
@@ -24,6 +25,7 @@ interface User {
   display_name: string;
   user_id: number;
   gender: number;
+  role: boolean;
 }
 
 const CommentCard: React.FC<{ comment: Comment; user: User }> = ({
@@ -48,19 +50,23 @@ const CommentCard: React.FC<{ comment: Comment; user: User }> = ({
             className="w-10 border rounded-full"
           />
           <div>
-            <h3 className="text-sm font-bold">
-              {comment.profiles.display_name}
-            </h3>
+            <div className="flex items-center gap-1">
+              <h3 className="text-sm font-bold">
+                {comment.profiles.display_name}
+              </h3>
+              {comment.profiles.role && <Icon icon={"material-symbols:verified"} />}
+            </div>
             <small>{timeAgo}</small>
           </div>
         </div>
-        {comment.user_id === user.user_id && (
-          <Form>
-            <Icon icon={"material-symbols:delete"} className="text-2xl" />
-          </Form>
-        )}
+        {comment.user_id === user.user_id ||
+          (user.role && (
+            <Form>
+              <Icon icon={"material-symbols:delete"} className="text-2xl" />
+            </Form>
+          ))}
       </div>
-      <small>{comment.content}</small>
+      <small className="text-right">{comment.content}</small>
     </div>
   );
 };
