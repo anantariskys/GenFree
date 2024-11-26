@@ -9,6 +9,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   const session = await sessionStorage.getSession(
     request.headers.get("Cookie")
   );
+
   const userId = session.get("user_id");
 
   if (!userId) {
