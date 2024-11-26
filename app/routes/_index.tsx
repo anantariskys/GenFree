@@ -11,7 +11,7 @@ import Lamp from "~/assets/lamp.png";
 import Warning from "~/assets/warning.png";
 import Arrow from "~/assets/arrow.png";
 import IsuCard from "~/components/IsuCard";
-import { isuData } from "~/data/dummy";
+import { howToUseData, isuData } from "~/data/dummy";
 import { sessionStorage } from "~/utils/session";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -39,7 +39,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Index() {
   const user = useLoaderData<{
-    user: { name: string };
+    user: { name: string,role:boolean } ;
     isu: {
       name: string;
       slug: string;
@@ -94,7 +94,7 @@ export default function Index() {
             <h1 className="text-2xl md:text-5xl font-bold text-center">
               Diskusi isu-isu Populer 🔥
             </h1>
-            <div className="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-4">
+            <div className="grid md:grid-cols-3 grid-cols-1 lg:grid-cols-5 gap-2">
               {user.isu.map((item) => (
                 <IsuCard
                   slug={item.slug}
@@ -139,8 +139,8 @@ export default function Index() {
             <h1 className="text-2xl md:text-5xl font-bold text-center">
               Caranya Gimana Sih? 🤔
             </h1>
-            <div className="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-4">
-              {Array.from({ length: 4 }).map((item, index) => (
+            <div className="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-3 gap-4">
+              {howToUseData.map((item, index) => (
                 <div
                   key={index}
                   className="w-full rounded-lg p-6 border shadow-2xl space-y-3"
@@ -150,10 +150,9 @@ export default function Index() {
                       {index + 1}
                     </h1>
                   </div>
-                  <h3 className="text-xl font-bold">Pilih Isu yang Menarik</h3>
+                  <h3 className="text-xl font-bold">{item.title}</h3>
                   <p>
-                    Temukan topik diskusi yang menarik minatmu. Mulai dari isu
-                    lingkungan, kebijakan, hingga hak asasi manusia.
+                   {item.description}
                   </p>
                 </div>
               ))}
