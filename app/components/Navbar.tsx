@@ -10,6 +10,7 @@ import { Icon } from "@iconify/react";
 interface NavbarProps {
   user: {
     name: string;
+    role:boolean
   } | null;
   isu :{
     name : string,
@@ -20,6 +21,8 @@ interface NavbarProps {
 const Navbar: FC<NavbarProps> = ({ user , isu}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+
+  console.log(user)
 
   return (
     <nav className="w-full py-2 fixed z-30 top-0 bg-white shadow-md font-semibold">
@@ -49,6 +52,13 @@ const Navbar: FC<NavbarProps> = ({ user , isu}) => {
               <Link to={"/profile"}>
                 <p className="py-2">Profile</p>
               </Link>{" "}
+              {
+                  user.role&&(
+                    <Link to="/admin">
+                      <p className="py-2">Admin Dashboard</p>
+                    </Link>
+                  )
+                }
               <Form method="post" action="/api/logout">
                 <Button width="w-fit">Keluar</Button>
               </Form>
@@ -100,6 +110,13 @@ const Navbar: FC<NavbarProps> = ({ user , isu}) => {
                 <Link to={"/profile"}>
                   <p className="py-2">Profile</p>
                 </Link>
+                {
+                  user.role&&(
+                    <Link to="/admin">
+                      <p className="py-2">Admin Dashboard</p>
+                    </Link>
+                  )
+                }
                 <Form method="post" action="/api/logout">
                   <Button width="w-fit">Keluar</Button>
                 </Form>
