@@ -30,7 +30,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 to="/admin/case"
                
               >
-                Users
+                Cases
               </NavLink>
             </li>
           </ul>
