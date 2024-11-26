@@ -8,8 +8,8 @@ interface Props {
 }
 const WhyCard: React.FC<Props> = ({ icon, title, description }) => {
   return (
-    <div className="w-full rounded-xl p-2 border flex gap-4 items-center">
-      <div className="min-w-24 aspect-square bg-primary bg-opacity-20 flex items-center justify-center rounded-lg">
+    <div className="w-full rounded-xl p-4 border flex gap-4 items-center">
+      <div className="min-w-28  aspect-square bg-primary bg-opacity-20 flex items-center justify-center rounded-lg">
         <Icon
           icon={icon}
           className="text-primary md:text-5xl text-2xl lg:text-6xl"
