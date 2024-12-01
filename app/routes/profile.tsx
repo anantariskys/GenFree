@@ -78,6 +78,7 @@ const profile = () => {
       display_name: string;
       user_id: number;
       gender: number;
+      role: boolean;
     };
     allIsu: { name: string; slug: string }[];
     userProfile: { user: { email: string } };
