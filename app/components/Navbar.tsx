@@ -97,10 +97,13 @@ const Navbar: FC<NavbarProps> = ({ user , isu}) => {
         <div className="md:hidden bg-white shadow-lg w-full">
           <div className="flex flex-col items-center gap-4 py-4">
             <Dropdown title="Isu">
-              <p className="py-1">Lingkungan</p>
-              <p className="py-1">Kebijakan</p>
-              <p className="py-1">Ham</p>
-              <p className="py-1">Pembangunan</p>
+            {
+              isu.map((item) => (
+                <Link key={item.slug} to={`/isu/${item.slug}`}>
+                  <p className="py-1">{item.name}</p>
+                </Link>
+              ))
+            }
             </Dropdown>
             <Link to={"/about"} className="cursor-pointer">
               Tentang Kami
