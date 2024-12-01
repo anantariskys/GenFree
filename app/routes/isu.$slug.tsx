@@ -36,7 +36,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   const cases = await supabase
     .from("cases")
     .select("*,isu(*),votes(*),comment(*,profiles(*),votes(*))")
-    .eq("category_id", isu.data.id);
+    .eq("category_id", isu.data.id).eq('is_published',true);
 
 
   let casesWithVoteCount = [];
@@ -89,6 +89,21 @@ export const action: ActionFunction = async ({ request }) => {
     const case_id = formData.get("case_id") as string;
     const isAgreed = formData.get("isAgreed") as string;
     const user_id = await supabase.auth.getUser();
+
+    if (!user_id.data.user?.id) {
+      return redirect("/login");
+    }
+    const profile = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("user_id", user_id.data.user?.id)
+      .single();
+
+    
+
+    if (profile.data.display_name ==='' ||profile.data.display_name === null) {
+      return json({ error: "Display Name belum diisi, tolong isi di halaman profile" }, { status: 200 });
+    }
     const vote = await supabase
       .from("votes")
       .insert({
