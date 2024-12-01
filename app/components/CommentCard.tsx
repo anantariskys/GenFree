@@ -59,12 +59,20 @@ const CommentCard: React.FC<{ comment: Comment; user: User }> = ({
             <small>{timeAgo}</small>
           </div>
         </div>
-        {comment.user_id === user.user_id ||
-          (user.role && (
+        {user.role?(
             <Form>
               <Icon icon={"material-symbols:delete"} className="text-2xl" />
             </Form>
-          ))}
+
+        ):(
+          comment.user_id === user.user_id&&
+          <Form>
+              <Icon icon={"material-symbols:delete"} className="text-2xl" />
+            </Form>
+            
+           
+        )}
+       
       </div>
       <small className="text-right">{comment.content}</small>
     </div>
