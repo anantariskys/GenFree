@@ -36,7 +36,7 @@ const PercentageCard: React.FC<cardProps> = ({
               ? `${Math.round((votes * 100) / total_votes)}%`
               : "0%"}
           </small>
-          <small>setuju</small>
+          <small>{variant ==='agree'?'Setuju':'Tidak Setuju'}</small>
         </div>
 
         <hr className={`${className} border-2 border-green-700 w-full`}/>
