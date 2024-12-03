@@ -11,7 +11,7 @@ interface Props {
 }
 const TeamCard:React.FC<Props> = ({item, index}) => {
   return (
-    <div  className="w-full   rounded-lg ">
+    <div  className="w-full space-y-2   rounded-lg ">
       <img
         src={item.img}
         className="w-full aspect-square rounded-3xl bg-gray-100 object-cover"
@@ -19,7 +19,7 @@ const TeamCard:React.FC<Props> = ({item, index}) => {
         draggable="false"
       />
       <h5 className="text-2xl font-semibold">{item.name}</h5>
-      <p className=" ">{item.role}</p>
+      {/* <p className=" ">{item.role}</p> */}
     </div>
   );
 };
