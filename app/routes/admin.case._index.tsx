@@ -83,6 +83,8 @@ export const action: ActionFunction = async ({ request }) => {
 export default function AdminCase() {
   const loaderData = useLoaderData<{ cases: any }>();
   const actionData = useActionData<{ error?: string ,success?:string}>();
+
+  console.log(loaderData)
   const { showToast } = useToast();
   useEffect(() => {
   
@@ -124,6 +126,7 @@ export default function AdminCase() {
               <th className="py-3 px-6 text-left">Title</th>
               <th className="py-3 px-6 text-left">Status</th>
               <th className="py-3 px-6 text-left">Isu</th>
+              <th className="py-3 px-6 text-left">Total Opini</th>
               <th className="py-3 px-6 text-left">Aksi</th>
             </tr>
           </thead>
@@ -135,6 +138,7 @@ export default function AdminCase() {
                   description: string;
                   is_published : boolean,
                   id:number
+                  comment: { id: number }[];
                   isu: {
                     name:
                       | string
@@ -154,6 +158,7 @@ export default function AdminCase() {
                   <td className="py-3 px-6 text-left">{caseItem.is_published?"Published":"Unpublished"}</td>
                
                   <td className="py-3 px-6 text-left">{caseItem.isu.name}</td>
+                  <td className="py-3 px-6 text-left">{caseItem.comment.length}</td>
                     <td className="py-3 px-6 text-left space-x-2 justify-evenly flex whitespace-nowrap">
                       {
                         caseItem.is_published?
@@ -177,6 +182,9 @@ export default function AdminCase() {
                       <Button  width="w-fit">Hapus</Button>
 
                       </Form>
+                      <Link to={`/admin/case/${caseItem.id}/opini`}>
+                      <Button  width="w-fit" variant="dark-outline">Lihat opini</Button>
+                      </Link>
          
                       {/* <Link to={`update/${caseItem.id}`}>
                       <Button variant="secondary" width="w-fit">Update</Button>
