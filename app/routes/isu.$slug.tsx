@@ -144,7 +144,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 const IsuPage = () => {
   const loaderData = useLoaderData<{
-    isu: { slug: string; name: string };
+    isu: { slug: string; name: string ,detail:string,image:string} ;
     user: {
       name: string;
       display_name: string;
@@ -204,7 +204,8 @@ const IsuPage = () => {
             <Icon icon={"ic:round-play-arrow"} />
           </p>
         </main>
-        <div className="md:w-1/2 w-full aspect-[8/5] rounded-lg bg-gray-200"></div>
+        <div className="md:w-1/2 w-full aspect-[8/5] rounded-lg  overflow-hidden bg-gray-200">
+          <img src={loaderData.isu.image} className="size-full object-cover" alt={loaderData.isu.name} draggable="false" /></div>
       </section>
       <section className="container py-4 md:py-8 space-y-4 md:space-y-8">
         <IsuInformation title="Peringatan ⚠">
@@ -217,19 +218,7 @@ const IsuPage = () => {
           bermakna!
         </IsuInformation>
         <IsuInformation title="Detail Isu">
-          {" "}
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-          tristique interdum orci et scelerisque. Praesent at vestibulum enim.
-          Cras convallis erat eget quam sodales blandit. Sed consequat
-          sollicitudin nisi. Curabitur lacinia eget turpis ut ultricies.
-          Suspendisse eget nunc a justo vulputate interdum. In hac habitasse
-          platea dictumst. Integer non nulla et magna maximus finibus ac vel
-          turpis. Maecenas sagittis ligula vitae neque blandit volutpat. Vivamus
-          orci arcu, sollicitudin ac semper et, varius eu nisi. Cras
-          pellentesque justo nec neque lobortis tincidunt. Nullam sed purus in
-          quam eleifend condimentum vitae nec est. Maecenas tincidunt diam nec
-          diam fermentum, in fringilla est lobortis. Vestibulum ante ipsum
-          primis in faucibus orci luctus et ultrices posuere cubilia curae;
+        {loaderData.isu.detail}
         </IsuInformation>
       </section>
       <section className="mx-auto container max-w-7xl py-8 space-y-4">
