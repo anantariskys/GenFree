@@ -25,10 +25,11 @@ export const action: ActionFunction = async ({ request }) => {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const gender = formData.get("gender") as string;
+  const display_name = formData.get("display_name") as string;
 
-  console.log(gender)
+ 
 
-  if (!name || !email || !password || !gender) {
+  if (!name || !email || !password || !gender||!display_name) {
     return json({ error: "All fields are required" }, { status: 400 });
   }
 
@@ -45,7 +46,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   const profile = await supabase
     .from("profiles")
-    .insert([{ name, user_id: data?.user?.id, gender: genderId }]);
+    .insert([{ name, user_id: data?.user?.id, gender: genderId ,display_name:display_name}]);
 
   if (profile.error) {
     return json({ error: profile.error.message }, { status: 400 });
@@ -82,7 +83,7 @@ const Register = () => {
           Daftar 👀
         </h1>
     
-        <div className="md:mt-8 space-y-4">
+        <div className="md:mt-8 space-y-2">
           <Input
             label="Nama"
             id="name"
@@ -106,6 +107,14 @@ const Register = () => {
             type="password"
             icon="lucide:key-round"
             name="password"
+          />
+          <Input
+            label="Display Name"
+            id="display_name"
+            placeholder="masukkan display name anda"
+            type="text"
+            icon="mdi:anonymous"
+            name="display_name"
           />
           <div className="flex items-center gap-4 space-y-2">
             <label htmlFor="gender" className="md:text-xl text-base">
@@ -133,9 +142,6 @@ const Register = () => {
             </div>
           </div>
 
-          <div className="flex justify-end">
-            <small className="text-right">lupa password</small>
-          </div>
           <Button type="submit" width="w-full" disabled={isSubmitting}>
           {isSubmitting ? "Loading..." : "Daftar"}
           </Button>
