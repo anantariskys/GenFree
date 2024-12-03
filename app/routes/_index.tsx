@@ -73,8 +73,7 @@ export default function Index() {
             GEN-FREE
           </h1>
           <p className="md:text-xl text-sm text-center font-semibold md:font-bold max-w-xl">
-            Tempat Terbaik Menyuarakan Pendapatmu Pemuda Beraksi, Demi Demokrasi
-            yang Lebih Baik!
+          Platform Demokrasi untuk Pemuda Beraksi!
           </p>
           <img
             src={HeroImage}
