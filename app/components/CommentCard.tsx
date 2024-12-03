@@ -59,7 +59,7 @@ const CommentCard: React.FC<{ comment: Comment; user: User }> = ({
             <small>{timeAgo}</small>
           </div>
         </div>
-        {user.role?(
+        {/* {user.role?(
             <Form>
               <Icon icon={"material-symbols:delete"} className="text-2xl" />
             </Form>
@@ -71,7 +71,7 @@ const CommentCard: React.FC<{ comment: Comment; user: User }> = ({
             </Form>
             
            
-        )}
+        )} */}
        
       </div>
       <small className="text-right">{comment.content}</small>
