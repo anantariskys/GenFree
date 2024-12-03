@@ -1,4 +1,4 @@
-import { ActionFunction, json, LoaderFunction } from '@remix-run/node';
+import { ActionFunction, json, LoaderFunction, redirect } from '@remix-run/node';
 import { Form, useActionData, useLoaderData } from '@remix-run/react';
 import React, { useEffect, useState, useTransition } from 'react';
 import TextEditor from '~/components/TextEditor';
@@ -61,7 +61,7 @@ export const action: ActionFunction = async ({ request }) => {
     return json({ error: insertResult.error.message}, { status: 500 });
   }
 
-  return json({ success: 'Data saved successfully.' });
+  return redirect('/admin/case');
 };
 
 const Create = () => {
