@@ -75,7 +75,7 @@ const CaseCard: React.FC<cardProps> = ({ props,user }) => {
     <div className="bg-white relative space-y-2 border-l-4 border-primary  shadow py-4 md:px-8 px-3 rounded-xl">
       <h2 className="text-base md:text-xl font-bold">{props.title}</h2>
       {props.image && (
-        <img src={props.image} alt="img" className="w-1/3 h-auto rounded-lg " />
+        <img src={props.image} alt="img" className="w-2/3 h-auto rounded-lg " />
       )}
 
       <article
