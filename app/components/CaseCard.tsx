@@ -79,7 +79,7 @@ const CaseCard: React.FC<cardProps> = ({ props,user }) => {
       )}
 
       <article
-        className=" prose-sm  prose"
+        className="md:prose-xl prose-sm  prose"
         dangerouslySetInnerHTML={{ __html: props.description }}
       ></article>
       {props.isUserLiked ? (
