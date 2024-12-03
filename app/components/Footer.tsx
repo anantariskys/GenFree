@@ -26,8 +26,7 @@ const Footer:FC<{variant?:boolean}> = ({variant=false}) => {
         <hr className="border-white border" />
         <div className="flex justify-between md:flex-row gap-4 flex-col items-center">
           <p className="max-w-sm text-sm md:text-base">
-            Beraksi, suarakan pendapat, dan terlibat dalam isu-isu penting
-            bersama GEN-FREE
+          Platform Demokrasi untuk Pemuda Beraksi!
           </p>
           <p className="text-sm md:text-base">© 2024 Gen-Free · Made with ❤️ by Tim IT</p>
         </div>
