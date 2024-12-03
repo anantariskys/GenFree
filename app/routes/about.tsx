@@ -70,11 +70,9 @@ const about = () => {
         <main className="justify-evenly flex items-start">
           <VisionMissionCard
             title="Visi Gen-Free"
-            description="Ekosistem Demokrasi"
+            description="Kritis, Taktis, Praktis"
           >
-            <p>
-            Menciptakan ekosistem demokrasi yang inklusif, dinamis, serta mendorong pemuda agar berperan aktif dalam perubahan sosial, politik, dan kebijakan untuk membangun masa depan yang berkeadilan dan berkelanjutan.
-            </p>
+          
           </VisionMissionCard>
 
           <VisionMissionCard
