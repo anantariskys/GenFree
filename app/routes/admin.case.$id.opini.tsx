@@ -35,10 +35,10 @@ export const action: ActionFunction = async ({ request }) => {
           .eq('id', opini_id);
     
         if (deleteCaseError) {
-          return json({ error: 'Error deleting case: ' + deleteCaseError.message }, { status: 500 });
+          return json({ error: 'Error deleting opini: ' + deleteCaseError.message }, { status: 500 });
         }
     
-        return json({ success: 'Case and image deleted successfully' });
+        return json({ success: 'Opini deleted successfully' });
       }
     }
   
