@@ -86,7 +86,7 @@ const CaseCard: React.FC<cardProps> = ({ props,user }) => {
         <>
           <PercentageSection props={props} />
           <Form method="post" ref={formRef}>
-            <div className="relative">
+            <div className="relative space-y-2">
               <input
                 disabled={isSubmitting}
                 placeholder="Tulis opini kalian di sini..."
@@ -94,14 +94,17 @@ const CaseCard: React.FC<cardProps> = ({ props,user }) => {
                 name="comment"
                 className="bg-gray-100 border rounded w-full px-4 py-2 focus:outline-none focus:ring focus:ring-primary/50"
               />
-              <Icon
+              <Button width="w-fit" className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                {isSubmitting ? "Mengirim..." : "Kirim"}
+              </Button>
+              {/* <Icon
                 icon={isSubmitting ? "mdi:loading" : "formkit:submit"}
                 className={`absolute right-4 top-1/2 transform -translate-y-1/2 text-primary ${
                   isSubmitting
                     ? "animate-spin"
                     : ""
                 }`}
-              />
+              /> */}
             </div>
             <input type="hidden" name="case_id" value={props.id} />
             <input type="hidden" name="event" value="comment" />
